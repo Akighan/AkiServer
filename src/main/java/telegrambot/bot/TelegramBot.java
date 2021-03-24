@@ -18,26 +18,20 @@ import static telegrambot.command.CommandName.NO;
 public class TelegramBot extends TelegramLongPollingBot {
     private static String username;
     private static String token;
-    private static File file = Paths.get("C:\\Users\\user\\Desktop\\AkiServer\\src\\main\\resources\\application.properties").toFile();
-
-    static {
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            Properties properties = new Properties();
-            properties.load(fileInputStream);
-            username = properties.getProperty("bot.username");
-            token = properties.getProperty("bot.token");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    private static File file = Paths.get("src\\main\\resources\\application.properties").toFile();
 
     public static String COMMAND_PREFIX = "/";
 
     private final CommandContainer commandContainer;
 
-    public TelegramBot() {
+    public TelegramBot() throws IOException {
         this.commandContainer = new CommandContainer(new SendBotMessageServiceImpl(this));
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+            Properties properties = new Properties();
+            properties.load(fileInputStream);
+            username = properties.getProperty("bot.username");
+            token = properties.getProperty("bot.token");
+        }
     }
 
 
