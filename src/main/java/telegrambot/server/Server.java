@@ -27,6 +27,7 @@ public class Server {
         ServerSocket server = new ServerSocket(PORT);
         try {
             while (true) {
+                System.out.println("Ищу подключения");
                 Socket socket = server.accept();
                 System.out.println("устанавливаю соединение");
                 try {

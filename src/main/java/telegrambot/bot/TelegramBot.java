@@ -1,11 +1,10 @@
 package telegrambot.bot;
 
-import telegrambot.service.CommandContainer;
-import telegrambot.service.SendBotMessageServiceImpl;
+import telegrambot.service.commands.CommandContainer;
+import telegrambot.service.commands.SendBotMessageServiceImpl;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -39,12 +38,19 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String message = update.getMessage().getText().trim();
+            System.out.println("Command received "+ message);
             if (message.startsWith(COMMAND_PREFIX)) {
+                System.out.println("I'm in");
                 String commandIdentifier = message.split(" ")[0].toLowerCase();
+                String clientId = null;
+                if (message.split(" ").length > 1) {
+                    clientId = message.split(" ")[1];
+                }
+                System.out.println("Client id " + clientId);
 
-                commandContainer.retrieveCommand(commandIdentifier).execute(update);
+                commandContainer.retrieveCommand(commandIdentifier).execute(update, clientId);
             } else {
-                commandContainer.retrieveCommand(NO.getCommandName()).execute(update);
+                commandContainer.retrieveCommand(NO.getCommandName()).execute(update, null);
             }
         }
     }

@@ -1,4 +1,4 @@
-package telegrambot.service;
+package telegrambot.service.commands;
 
 import telegrambot.command.Command;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -14,7 +14,7 @@ public class UnknownCommand implements Command {
     }
 
     @Override
-    public void execute(Update update) {
+    public void execute(Update update, String clientId) {
         sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), UNKNOWN_MESSAGE);
     }
 }

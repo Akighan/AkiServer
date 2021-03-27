@@ -1,4 +1,4 @@
-package telegrambot.service;
+package telegrambot.service.commands;
 
 import telegrambot.bot.TelegramBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

@@ -1,13 +1,17 @@
 package telegrambot.server;
 
 import telegrambot.bot.TelegramBot;
-import telegrambot.service.SendBotMessageService;
-import telegrambot.service.SendBotMessageServiceImpl;
+import telegrambot.service.clients.Client;
+import telegrambot.service.clients.ClientContainer;
+import telegrambot.service.commands.SendBotMessageService;
+import telegrambot.service.commands.SendBotMessageServiceImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AndrClient extends Thread {
     private Socket socket;
@@ -15,7 +19,7 @@ public class AndrClient extends Thread {
     private TelegramBot telegramBot;
     private SendBotMessageService sendBotMessageService;
 
-    public AndrClient (Socket socket, TelegramBot telegramBot) throws IOException {
+    public AndrClient(Socket socket, TelegramBot telegramBot) throws IOException {
         this.telegramBot = telegramBot;
         this.socket = socket;
         SendBotMessageService sendBotMessageService = new SendBotMessageServiceImpl(telegramBot);
@@ -25,19 +29,19 @@ public class AndrClient extends Thread {
 
     @Override
     public void run() {
-        String word = null;
-        String id = null;
-
+        String note = null;
+        String clientId = null;
+        ClientContainer clientContainer = ClientContainer.getInstance();
+        List<String> notes = new ArrayList<>();
         try {
-//            if (in.ready()) {
-//                id = in.readLine();
-//                System.out.println(id);
-//            }
-            while (in.ready()) {
-                word = in.readLine();
-                if (id != null && word != null) {
-                    sendBotMessageService.sendMessage("825476859", word);
+            if (in.ready()) {
+                clientId = in.readLine();
+
+                while (in.ready()) {
+                    note = in.readLine();
+                    notes.add(note);
                 }
+                clientContainer.getClient(clientId).setListOfNotes(notes);
             }
         } catch (IOException e) {
         }

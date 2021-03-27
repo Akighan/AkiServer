@@ -1,4 +1,4 @@
-package telegrambot.service;
+package telegrambot.service.commands;
 
 import telegrambot.command.Command;
 import com.google.common.collect.ImmutableMap;
