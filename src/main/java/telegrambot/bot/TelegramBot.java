@@ -4,6 +4,8 @@ import telegrambot.service.commands.CommandContainer;
 import telegrambot.service.commands.SendBotMessageServiceImpl;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import telegrambot.service.commands.TimerCommand;
+import telegrambot.service.sendontime.OnTimeMessageSender;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,17 +42,11 @@ public class TelegramBot extends TelegramLongPollingBot {
             String message = update.getMessage().getText().trim();
             System.out.println("Command received "+ message);
             if (message.startsWith(COMMAND_PREFIX)) {
-                System.out.println("I'm in");
                 String commandIdentifier = message.split(" ")[0].toLowerCase();
-                String clientId = null;
-                if (message.split(" ").length > 1) {
-                    clientId = message.split(" ")[1];
-                }
-                System.out.println("Client id " + clientId);
 
-                commandContainer.retrieveCommand(commandIdentifier).execute(update, clientId);
+                commandContainer.retrieveCommand(commandIdentifier).execute(update);
             } else {
-                commandContainer.retrieveCommand(NO.getCommandName()).execute(update, null);
+                commandContainer.retrieveCommand(NO.getCommandName()).execute(update);
             }
         }
     }

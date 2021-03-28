@@ -10,10 +10,14 @@ public class CommandContainer {
     private final Command unknownCommand;
 
     public CommandContainer (SendBotMessageService sendBotMessageService) {
+        TimerCommand timerCommand = new TimerCommand(sendBotMessageService);
+        timerCommand.new TimerMessageSetter ().initTimers();
+
         commandMap = ImmutableMap.builder()
                 .put(START.getCommandName(), new StartCommand(sendBotMessageService))
                 .put(HELP.getCommandName(), new HelpCommand(sendBotMessageService))
                 .put(NO.getCommandName(), new NoCommand(sendBotMessageService))
+                .put (TIMER.getCommandName(), timerCommand)
                 .build();
         unknownCommand = new UnknownCommand(sendBotMessageService);
     }

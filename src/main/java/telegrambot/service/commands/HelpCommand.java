@@ -22,7 +22,7 @@ public class HelpCommand implements Command {
     }
 
     @Override
-    public void execute(Update update, String clientId) {
+    public void execute(Update update) {
         sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(),HELP_MESSAGE);
     }
 }

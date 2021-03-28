@@ -6,12 +6,14 @@ import java.util.List;
 public class Client {
     private final String clientId;
     private final String chatId;
-    List<String> listOfNotes;
+    private List<String> listOfNotes;
+    private List <String> listOfTimes;
 
     public Client(String clientId, String chatId) {
         this.clientId = clientId;
         this.chatId = chatId;
         listOfNotes = new ArrayList<>();
+        listOfTimes = new ArrayList<>();
     }
 
     public String getClientId () {
@@ -28,5 +30,13 @@ public class Client {
 
     public List<String> getListOfNotes() {
         return listOfNotes;
+    }
+
+    public List<String> getListOfTimes() {
+        return listOfTimes;
+    }
+
+    public void setListOfTimes(List<String> listOfTimes) {
+        this.listOfTimes = listOfTimes;
     }
 }

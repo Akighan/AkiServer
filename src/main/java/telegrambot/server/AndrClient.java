@@ -17,12 +17,10 @@ public class AndrClient extends Thread {
     private Socket socket;
     private BufferedReader in;
     private TelegramBot telegramBot;
-    private SendBotMessageService sendBotMessageService;
 
     public AndrClient(Socket socket, TelegramBot telegramBot) throws IOException {
         this.telegramBot = telegramBot;
         this.socket = socket;
-        SendBotMessageService sendBotMessageService = new SendBotMessageServiceImpl(telegramBot);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         start();
     }
@@ -41,7 +39,7 @@ public class AndrClient extends Thread {
                     note = in.readLine();
                     notes.add(note);
                 }
-                clientContainer.getClient(clientId).setListOfNotes(notes);
+                clientContainer.getClientByClientId(clientId).setListOfNotes(notes);
             }
         } catch (IOException e) {
         }

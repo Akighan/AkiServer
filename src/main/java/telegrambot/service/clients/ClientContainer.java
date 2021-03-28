@@ -10,7 +10,8 @@ import static telegrambot.command.CommandName.*;
 
 public class ClientContainer {
 
-    private static HashMap <String, Client> clientMap;
+    private static HashMap <String, Client> clientIdMap;
+    private static HashMap <String, Client> chatIdMap;
     private static ClientContainer clientContainer;
 
     private ClientContainer() {
@@ -19,17 +20,31 @@ public class ClientContainer {
     public static ClientContainer getInstance () {
         if (clientContainer == null) {
             clientContainer = new ClientContainer();
-            clientMap = new HashMap<>();
+            clientIdMap = new HashMap<>();
+            chatIdMap = new HashMap<>();
         }
         return clientContainer;
     }
 
-    public Client getClient (String clientId) {
-        return clientMap.get(clientId);
+    public HashMap<String, Client> getClientMap() {
+        return clientIdMap;
+    }
+
+    public HashMap<String, Client> getChatIdMap() {
+        return chatIdMap;
+    }
+
+    public Client getClientByClientId (String clientId) {
+        return clientIdMap.get(clientId);
+    }
+
+    public Client getClientByChatId (String chatId) {
+        return chatIdMap.get(chatId);
     }
 
     public void putClient (Client client) {
-        clientMap.put(client.getClientId(),client);
+        clientIdMap.put(client.getClientId(),client);
+        chatIdMap.put(client.getChatId(),client);
     }
 }
 
