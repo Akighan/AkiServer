@@ -1,11 +1,12 @@
 package telegrambot.bot;
 
-import telegrambot.service.CommandContainer;
-import telegrambot.service.SendBotMessageServiceImpl;
+import telegrambot.service.commands.CommandContainer;
+import telegrambot.service.commands.SendBotMessageServiceImpl;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import telegrambot.service.commands.TimerCommand;
+import telegrambot.service.sendontime.OnTimeMessageSender;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,26 +19,20 @@ import static telegrambot.command.CommandName.NO;
 public class TelegramBot extends TelegramLongPollingBot {
     private static String username;
     private static String token;
-    private static File file = Paths.get("C:\\Users\\user\\Desktop\\AkiServer\\src\\main\\resources\\application.properties").toFile();
-
-    static {
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            Properties properties = new Properties();
-            properties.load(fileInputStream);
-            username = properties.getProperty("bot.username");
-            token = properties.getProperty("bot.token");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    private static File file = Paths.get("src\\main\\resources\\application.properties").toFile();
 
     public static String COMMAND_PREFIX = "/";
 
     private final CommandContainer commandContainer;
 
-    public TelegramBot() {
+    public TelegramBot() throws IOException {
         this.commandContainer = new CommandContainer(new SendBotMessageServiceImpl(this));
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+            Properties properties = new Properties();
+            properties.load(fileInputStream);
+            username = properties.getProperty("bot.username");
+            token = properties.getProperty("bot.token");
+        }
     }
 
 
@@ -45,6 +40,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String message = update.getMessage().getText().trim();
+            System.out.println("Command received "+ message);
             if (message.startsWith(COMMAND_PREFIX)) {
                 String commandIdentifier = message.split(" ")[0].toLowerCase();
 

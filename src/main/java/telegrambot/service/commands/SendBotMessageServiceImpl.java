@@ -1,4 +1,4 @@
-package telegrambot.service;
+package telegrambot.service.commands;
 
 import telegrambot.bot.TelegramBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
 public class SendBotMessageServiceImpl implements SendBotMessageService {
+
 
     private final TelegramBot telegramBot;
 
@@ -26,5 +27,9 @@ public class SendBotMessageServiceImpl implements SendBotMessageService {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+    }
+
+    public TelegramBot getTelegramBot() {
+        return telegramBot;
     }
 }
