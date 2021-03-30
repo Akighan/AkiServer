@@ -15,10 +15,11 @@ public class HelpCommand implements Command {
 
                     + "Начать\\закончить работу с ботом\n"
                     + "%s - начать работу со мной\n"
-                    + "%s - приостановить работу со мной\n\n"
+//                    + "%s - приостановить работу со мной\n\n"
                     + "%s - получить помощь в работе со мной\n" +
-                    "%s - задать ежедневные оповещения в формате %4$s чч:мм",
-            START.getCommandName(), STOP.getCommandName(), HELP.getCommandName(), TIMER.getCommandName());
+                    "%s - задать ежедневные оповещения в формате %3$s чч:мм",
+//            START.getCommandName(), STOP.getCommandName(), HELP.getCommandName(), TIMER.getCommandName());
+            START.getCommandName(), HELP.getCommandName(), TIMER.getCommandName());
 
     public HelpCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;

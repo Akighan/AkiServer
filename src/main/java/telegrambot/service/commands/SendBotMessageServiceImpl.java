@@ -18,12 +18,14 @@ public class SendBotMessageServiceImpl implements SendBotMessageService {
     @Override
     public void sendMessage(String chatId, String message) {
         SendMessage sendMessage = new SendMessage();
+        sendMessage.disableWebPagePreview();
         sendMessage.setChatId(chatId);
         sendMessage.enableHtml(true);
         sendMessage.setText(message);
 
         try {
             telegramBot.execute(sendMessage);
+
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

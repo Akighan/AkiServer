@@ -32,6 +32,14 @@ public class Client {
         return listOfNotes;
     }
 
+    public String notesToString () {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String note:listOfNotes) {
+            stringBuilder.append(note).append("\n\n");
+        }
+        return stringBuilder.toString();
+    }
+
     public List<String> getListOfTimes() {
         return listOfTimes;
     }
