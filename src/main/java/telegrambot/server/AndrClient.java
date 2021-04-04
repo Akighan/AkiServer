@@ -17,6 +17,8 @@ public class AndrClient extends Thread {
     private Socket socket;
     private BufferedReader in;
     private TelegramBot telegramBot;
+    public static final String SEND_NOTES_MODIFICATION = "-N";
+    public static final String SEND_SETTINGS_MODIFICATION = "-S";
 
     public AndrClient(Socket socket, TelegramBot telegramBot) throws IOException {
         this.telegramBot = telegramBot;
@@ -32,14 +34,41 @@ public class AndrClient extends Thread {
         ClientContainer clientContainer = ClientContainer.getInstance();
         List<String> notes = new ArrayList<>();
         try {
-            if (in.ready()) {
-                clientId = in.readLine();
+            if (in.ready()) clientId = in.readLine();
+            String modification = in.readLine();
 
-                while (in.ready()) {
-                    note = in.readLine();
-                    notes.add(note);
+            switch (modification) {
+                case SEND_NOTES_MODIFICATION: {
+                    while (in.ready()) {
+                        note = in.readLine();
+                        notes.add(note);
+                    }
+                    Client client = clientContainer.getClientByClientId(clientId);
+                    if (client == null) {
+                        client = new Client(clientId);
+                        clientContainer.putClient(client);
+                    }
+                    client.setListOfNotes(notes);
+                    break;
                 }
-                clientContainer.getClientByClientId(clientId).setListOfNotes(notes);
+                case SEND_SETTINGS_MODIFICATION: {
+                    boolean isTelegramChecked;
+                    boolean isWeatherNotificationChecked;
+                    int cityChosen;
+                    if (in.ready()) {
+                        isTelegramChecked = Boolean.getBoolean(in.readLine());
+                        isWeatherNotificationChecked = Boolean.getBoolean(in.readLine());
+                        cityChosen = Integer.parseInt(in.readLine());
+                        Client client;
+                        do {
+                            client = clientContainer.getClientByClientId(clientId);
+                        } while (client == null);
+                        client.setTelegramChecked(isTelegramChecked);
+                        client.setWeatherNotificationChecked(isWeatherNotificationChecked);
+                        client.setCityChosen(cityChosen);
+                    }
+                    break;
+                }
             }
         } catch (IOException e) {
         }

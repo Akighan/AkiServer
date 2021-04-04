@@ -4,14 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Client {
-    private final String clientId;
-    private final String chatId;
+    private String clientId;
+    private String chatId;
     private List<String> listOfNotes;
     private List <String> listOfTimes;
+    private boolean isTelegramChecked = false;
+    private boolean isWeatherNotificationChecked = false;
+    private int cityChosen;
 
     public Client(String clientId, String chatId) {
         this.clientId = clientId;
         this.chatId = chatId;
+        listOfNotes = new ArrayList<>();
+        listOfTimes = new ArrayList<>();
+    }
+
+    public Client(String clientId) {
+        this.clientId = clientId;
+        this.chatId = null;
         listOfNotes = new ArrayList<>();
         listOfTimes = new ArrayList<>();
     }
@@ -46,5 +56,37 @@ public class Client {
 
     public void setListOfTimes(List<String> listOfTimes) {
         this.listOfTimes = listOfTimes;
+    }
+
+    public boolean isTelegramChecked() {
+        return isTelegramChecked;
+    }
+
+    public void setTelegramChecked(boolean telegramChecked) {
+        isTelegramChecked = telegramChecked;
+    }
+
+    public boolean isWeatherNotificationChecked() {
+        return isWeatherNotificationChecked;
+    }
+
+    public void setWeatherNotificationChecked(boolean weatherNotificationChecked) {
+        isWeatherNotificationChecked = weatherNotificationChecked;
+    }
+
+    public int getCityChosen() {
+        return cityChosen;
+    }
+
+    public void setCityChosen(int cityChosen) {
+        this.cityChosen = cityChosen;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
     }
 }

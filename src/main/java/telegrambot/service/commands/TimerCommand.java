@@ -51,6 +51,10 @@ public class TimerCommand implements Command {
             } else
                 sendBotMessageService.sendMessage(client.getChatId(), String.format(("%s: %s. Время не задано."), INCORRECT_TIME_MESSAGE, time));
         }
+        if (!client.isTelegramChecked()) {
+            sendBotMessageService.sendMessage(client.getChatId(), "Таймеры заданы, но уведомления не будут получены. Включите телеграм-бота в настройках" +
+                    " приложения.");
+        }
     }
 
     private boolean isTimerAlreadyHas(String time, Client client) {

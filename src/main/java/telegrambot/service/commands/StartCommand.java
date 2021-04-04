@@ -45,14 +45,17 @@ public class StartCommand implements Command {
             }
 
         } else {
-            client = clientContainer.getClientByClientId(clientId);
+            do {
+            client = clientContainer.getClientByClientId(clientId);}
+            while (client == null);
         }
-        if (client == null) {
-            clientContainer.putClient(new Client(clientId, chatId.toString()));
+        if (client.getChatId() == null) {
+            client.setChatId(chatId.toString());
+            clientContainer.putClient(client);
             sendBotMessageService.sendMessage(chatId.toString(), START_MESSAGE);
         } else {
             sendBotMessageService.sendMessage(chatId.toString(), START_MESSAGE_SHORT);
-            if (client.getListOfTimes() != null && client.getListOfTimes().size() > 0) {
+            if (client.isTelegramChecked() && client.getListOfTimes() != null && client.getListOfTimes().size() > 0) {
                 List<String> sortedTimes = client.getListOfTimes();
                 sortedTimes.sort((o1, o2) -> {
                     int firstTime = Integer.parseInt(o1.replace(":", ""));
