@@ -1,10 +1,7 @@
 package telegrambot.service.sendontime;
 
-import telegrambot.bot.TelegramBot;
 import telegrambot.service.clients.Client;
-import telegrambot.service.clients.ClientContainer;
 import telegrambot.service.commands.SendBotMessageService;
-import telegrambot.service.commands.TimerCommand;
 import telegrambot.service.parser.CityContainer;
 import telegrambot.service.parser.NewsParser;
 import telegrambot.service.parser.WeatherParser;

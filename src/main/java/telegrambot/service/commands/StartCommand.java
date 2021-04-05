@@ -43,14 +43,11 @@ public class StartCommand implements Command {
                 sendBotMessageService.sendMessage(chatId.toString(), NO_CLIENT_ID_MESSAGE);
                 return;
             }
-
         } else {
-            do {
-            client = clientContainer.getClientByClientId(clientId);}
-            while (client == null);
+            client = clientContainer.getClientByClientId(clientId);
         }
-        if (client.getChatId() == null) {
-            client.setChatId(chatId.toString());
+        if (client == null) {
+            client = new Client (clientId, chatId.toString());
             clientContainer.putClient(client);
             sendBotMessageService.sendMessage(chatId.toString(), START_MESSAGE);
         } else {

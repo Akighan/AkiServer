@@ -29,7 +29,7 @@ public class AndrClient extends Thread {
 
     @Override
     public void run() {
-        String note = null;
+        String note;
         String clientId = null;
         ClientContainer clientContainer = ClientContainer.getInstance();
         List<String> notes = new ArrayList<>();
@@ -44,25 +44,20 @@ public class AndrClient extends Thread {
                         notes.add(note);
                     }
                     Client client = clientContainer.getClientByClientId(clientId);
-                    if (client == null) {
-                        client = new Client(clientId);
-                        clientContainer.putClient(client);
+                    if (client != null) {
+                        client.setListOfNotes(notes);
                     }
-                    client.setListOfNotes(notes);
                     break;
                 }
                 case SEND_SETTINGS_MODIFICATION: {
-                    boolean isTelegramChecked;
-                    boolean isWeatherNotificationChecked;
-                    int cityChosen;
-                    if (in.ready()) {
-                        isTelegramChecked = Boolean.getBoolean(in.readLine());
-                        isWeatherNotificationChecked = Boolean.getBoolean(in.readLine());
-                        cityChosen = Integer.parseInt(in.readLine());
-                        Client client;
-                        do {
-                            client = clientContainer.getClientByClientId(clientId);
-                        } while (client == null);
+                    boolean isTelegramChecked = false;
+                    boolean isWeatherNotificationChecked = false;
+                    int cityChosen = 0;
+                    if (in.ready()) isTelegramChecked = Boolean.parseBoolean(in.readLine().trim());
+                    if (in.ready()) isWeatherNotificationChecked = Boolean.parseBoolean(in.readLine().trim());
+                    if (in.ready()) cityChosen = Integer.parseInt(in.readLine());
+                    Client client = clientContainer.getClientByClientId(clientId);
+                    if (client != null) {
                         client.setTelegramChecked(isTelegramChecked);
                         client.setWeatherNotificationChecked(isWeatherNotificationChecked);
                         client.setCityChosen(cityChosen);

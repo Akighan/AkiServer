@@ -43,12 +43,9 @@ public class ClientContainer {
     }
 
     public void putClient(Client client) {
-        if (client.getClientId() != null) {
             clientIdMap.putIfAbsent(client.getClientId(), client);
-        }
-        if (client.getChatId() != null) {
+
             chatIdMap.putIfAbsent(client.getChatId(), client);
-        }
     }
 }
 

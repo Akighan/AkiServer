@@ -19,7 +19,6 @@ public class WeatherParser {
 
         Elements spans = doc.select("span [class=js_value tab-weather__value_l]");
         Element span = spans.get(0);
-        System.out.println(span.text());
         return span.text();
     }
 }
