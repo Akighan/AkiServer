@@ -96,11 +96,16 @@ public class TimerCommand implements Command {
 
 
             Calendar date = Calendar.getInstance();
+            Calendar rightNow = Calendar.getInstance();
 
             date.set(Calendar.HOUR_OF_DAY, hour);
             date.set(Calendar.MINUTE, minute);
             date.set(Calendar.SECOND, 0);
             date.set(Calendar.MILLISECOND, 0);
+
+            if (date.before(rightNow)) {
+                date.set(Calendar.DATE, (rightNow.get(Calendar.DAY_OF_MONTH)+1));
+            }
 
             System.out.println(date.getTime());
             timer.schedule(
