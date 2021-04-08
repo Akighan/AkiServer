@@ -1,12 +1,6 @@
 package telegrambot.service.clients;
 
-import com.google.common.collect.ImmutableMap;
-import telegrambot.command.Command;
-import telegrambot.service.commands.*;
-
 import java.util.HashMap;
-
-import static telegrambot.command.CommandName.*;
 
 public class ClientContainer {
 
@@ -26,7 +20,7 @@ public class ClientContainer {
         return clientContainer;
     }
 
-    public HashMap<String, Client> getClientMap() {
+    public HashMap<String, Client> getClientIdMap() {
         return clientIdMap;
     }
 

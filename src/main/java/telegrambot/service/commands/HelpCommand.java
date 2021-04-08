@@ -14,12 +14,14 @@ public class HelpCommand implements Command {
     public static final String HELP_MESSAGE = String.format("✨Доступные команды✨\n\n"
 
                     + "Начать\\закончить работу с ботом\n"
-                    + "%s - начать работу со мной\n"
+                    + "%s - начать работу со мной, а так же узнать установленные таймеры ежедневных оповещений\n"
 //                    + "%s - приостановить работу со мной\n\n"
                     + "%s - получить помощь в работе со мной\n" +
-                    "%s - задать ежедневные оповещения в формате %3$s чч:мм",
+                    "%s - задать ежедневные оповещения в формате %3$s чч:мм\n" +
+                    "%s - в формате %4$s чч:мм удаляет оповещение на заданное время.\n" +
+                    "Вы так же можете удалить все оповещения командой %4$s all",
 //            START.getCommandName(), STOP.getCommandName(), HELP.getCommandName(), TIMER.getCommandName());
-            START.getCommandName(), HELP.getCommandName(), TIMER.getCommandName());
+            START.getCommandName(), HELP.getCommandName(), TIMER.getCommandName(), DELETE.getCommandName());
 
     public HelpCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;
@@ -33,6 +35,6 @@ public class HelpCommand implements Command {
             sendBotMessageService.sendMessage(chatId.toString(), StartCommand.NO_CLIENT_ID_MESSAGE);
             return;
         }
-        sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(),HELP_MESSAGE);
+        sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), HELP_MESSAGE);
     }
 }

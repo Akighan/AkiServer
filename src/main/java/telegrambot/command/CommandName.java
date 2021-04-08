@@ -5,6 +5,7 @@ public enum CommandName {
     STOP ("/stop"),
     HELP ("/help"),
     TIMER ("/timer"),
+    DELETE ("/delete"),
     NO ("");
 
     private final String commandName;

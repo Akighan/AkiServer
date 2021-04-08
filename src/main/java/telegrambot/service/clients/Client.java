@@ -1,13 +1,12 @@
 package telegrambot.service.clients;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Client {
     private String clientId;
     private String chatId;
     private List<String> listOfNotes;
-    private List <String> listOfTimes;
+    private Map<String, Timer> timesMap;
     private boolean isTelegramChecked = false;
     private boolean isWeatherNotificationChecked = false;
     private boolean isNewsNotificationChecked = false;
@@ -17,17 +16,17 @@ public class Client {
         this.clientId = clientId;
         this.chatId = chatId;
         listOfNotes = new ArrayList<>();
-        listOfTimes = new ArrayList<>();
+        timesMap = new HashMap<>();
     }
 
     public Client(String clientId) {
         this.clientId = clientId;
         this.chatId = null;
         listOfNotes = new ArrayList<>();
-        listOfTimes = new ArrayList<>();
+        timesMap = new HashMap<>();
     }
 
-    public String getClientId () {
+    public String getClientId() {
         return clientId;
     }
 
@@ -43,20 +42,34 @@ public class Client {
         return listOfNotes;
     }
 
-    public String notesToString () {
+    public String notesToString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (String note:listOfNotes) {
+        for (String note : listOfNotes) {
             stringBuilder.append(note).append("\n\n");
         }
         return stringBuilder.toString();
     }
 
-    public List<String> getListOfTimes() {
+    public Map<String, Timer> getTimesMap() {
+        return timesMap;
+    }
+
+    public List <String> getSortedTimesMapKeys () {
+        List <String> listOfTimes = new ArrayList<>();
+        for (Map.Entry<String, Timer> timer:timesMap.entrySet()) {
+            listOfTimes.add(timer.getKey());
+        }
+        listOfTimes.sort((o1, o2) -> {
+            int firstTime = Integer.parseInt(o1.replace(":", ""));
+            int secondTime = Integer.parseInt(o2.replace(":", ""));
+            return Integer.compare(firstTime, secondTime);
+        });
+
         return listOfTimes;
     }
 
-    public void setListOfTimes(List<String> listOfTimes) {
-        this.listOfTimes = listOfTimes;
+    public void setTimesMap(Map<String, Timer> timesMap) {
+        this.timesMap = timesMap;
     }
 
     public boolean isTelegramChecked() {
