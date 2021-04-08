@@ -1,22 +1,32 @@
 package telegrambot.service.clients;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Client {
-    private final String clientId;
-    private final String chatId;
+    private String clientId;
+    private String chatId;
     private List<String> listOfNotes;
-    private List <String> listOfTimes;
+    private Map<String, Timer> timesMap;
+    private boolean isTelegramChecked = false;
+    private boolean isWeatherNotificationChecked = false;
+    private boolean isNewsNotificationChecked = false;
+    private int cityChosen;
 
     public Client(String clientId, String chatId) {
         this.clientId = clientId;
         this.chatId = chatId;
         listOfNotes = new ArrayList<>();
-        listOfTimes = new ArrayList<>();
+        timesMap = new HashMap<>();
     }
 
-    public String getClientId () {
+    public Client(String clientId) {
+        this.clientId = clientId;
+        this.chatId = null;
+        listOfNotes = new ArrayList<>();
+        timesMap = new HashMap<>();
+    }
+
+    public String getClientId() {
         return clientId;
     }
 
@@ -32,19 +42,73 @@ public class Client {
         return listOfNotes;
     }
 
-    public String notesToString () {
+    public String notesToString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (String note:listOfNotes) {
+        for (String note : listOfNotes) {
             stringBuilder.append(note).append("\n\n");
         }
         return stringBuilder.toString();
     }
 
-    public List<String> getListOfTimes() {
+    public Map<String, Timer> getTimesMap() {
+        return timesMap;
+    }
+
+    public List <String> getSortedTimesMapKeys () {
+        List <String> listOfTimes = new ArrayList<>();
+        for (Map.Entry<String, Timer> timer:timesMap.entrySet()) {
+            listOfTimes.add(timer.getKey());
+        }
+        listOfTimes.sort((o1, o2) -> {
+            int firstTime = Integer.parseInt(o1.replace(":", ""));
+            int secondTime = Integer.parseInt(o2.replace(":", ""));
+            return Integer.compare(firstTime, secondTime);
+        });
+
         return listOfTimes;
     }
 
-    public void setListOfTimes(List<String> listOfTimes) {
-        this.listOfTimes = listOfTimes;
+    public void setTimesMap(Map<String, Timer> timesMap) {
+        this.timesMap = timesMap;
+    }
+
+    public boolean isTelegramChecked() {
+        return isTelegramChecked;
+    }
+
+    public void setTelegramChecked(boolean telegramChecked) {
+        isTelegramChecked = telegramChecked;
+    }
+
+    public boolean isWeatherNotificationChecked() {
+        return isWeatherNotificationChecked;
+    }
+
+    public void setWeatherNotificationChecked(boolean weatherNotificationChecked) {
+        isWeatherNotificationChecked = weatherNotificationChecked;
+    }
+
+    public boolean isNewsNotificationChecked() {
+        return isNewsNotificationChecked;
+    }
+
+    public void setNewsNotificationChecked(boolean newsNotificationChecked) {
+        isNewsNotificationChecked = newsNotificationChecked;
+    }
+
+    public int getCityChosen() {
+        return cityChosen;
+    }
+
+    public void setCityChosen(int cityChosen) {
+        this.cityChosen = cityChosen;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
     }
 }

@@ -5,8 +5,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import telegrambot.service.clients.Client;
 import telegrambot.service.clients.ClientContainer;
 
-import java.util.Comparator;
 import java.util.List;
+
 
 public class StartCommand implements Command {
 
@@ -32,7 +32,7 @@ public class StartCommand implements Command {
         String clientId = null;
         Long chatId = update.getMessage().getChatId();
         String message = update.getMessage().getText().trim();
-        Client client = null;
+        Client client;
         if (message.split(" ").length > 1) {
             clientId = message.split(" ")[1];
         }
@@ -43,22 +43,17 @@ public class StartCommand implements Command {
                 sendBotMessageService.sendMessage(chatId.toString(), NO_CLIENT_ID_MESSAGE);
                 return;
             }
-
         } else {
             client = clientContainer.getClientByClientId(clientId);
         }
         if (client == null) {
-            clientContainer.putClient(new Client(clientId, chatId.toString()));
+            client = new Client (clientId, chatId.toString());
+            clientContainer.putClient(client);
             sendBotMessageService.sendMessage(chatId.toString(), START_MESSAGE);
         } else {
             sendBotMessageService.sendMessage(chatId.toString(), START_MESSAGE_SHORT);
-            if (client.getListOfTimes() != null && client.getListOfTimes().size() > 0) {
-                List<String> sortedTimes = client.getListOfTimes();
-                sortedTimes.sort((o1, o2) -> {
-                    int firstTime = Integer.parseInt(o1.replace(":", ""));
-                    int secondTime = Integer.parseInt(o2.replace(":", ""));
-                    return Integer.compare(firstTime, secondTime);
-                });
+            if (client.isTelegramChecked() && client.getTimesMap() != null && client.getTimesMap().size() > 0) {
+                List<String> sortedTimes = client.getSortedTimesMapKeys();
 
                 sendBotMessageService.sendMessage(chatId.toString(), "Ежедневные оповещения установлены на следующее время:\n" + sortedTimes);
             }

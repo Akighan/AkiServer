@@ -17,6 +17,8 @@ public class AndrClient extends Thread {
     private Socket socket;
     private BufferedReader in;
     private TelegramBot telegramBot;
+    public static final String SEND_NOTES_MODIFICATION = "-N";
+    public static final String SEND_SETTINGS_MODIFICATION = "-S";
 
     public AndrClient(Socket socket, TelegramBot telegramBot) throws IOException {
         this.telegramBot = telegramBot;
@@ -27,19 +29,44 @@ public class AndrClient extends Thread {
 
     @Override
     public void run() {
-        String note = null;
+        String note;
         String clientId = null;
         ClientContainer clientContainer = ClientContainer.getInstance();
         List<String> notes = new ArrayList<>();
         try {
-            if (in.ready()) {
-                clientId = in.readLine();
+            if (in.ready()) clientId = in.readLine();
+            String modification = in.readLine();
 
-                while (in.ready()) {
-                    note = in.readLine();
-                    notes.add(note);
+            switch (modification) {
+                case SEND_NOTES_MODIFICATION: {
+                    while (in.ready()) {
+                        note = in.readLine();
+                        notes.add(note);
+                    }
+                    Client client = clientContainer.getClientByClientId(clientId);
+                    if (client != null) {
+                        client.setListOfNotes(notes);
+                    }
+                    break;
                 }
-                clientContainer.getClientByClientId(clientId).setListOfNotes(notes);
+                case SEND_SETTINGS_MODIFICATION: {
+                    boolean isTelegramChecked = false;
+                    boolean isWeatherNotificationChecked = false;
+                    boolean isNewsNotificationChecked = false;
+                    int cityChosen = 0;
+                    if (in.ready()) isTelegramChecked = Boolean.parseBoolean(in.readLine().trim());
+                    if (in.ready()) isWeatherNotificationChecked = Boolean.parseBoolean(in.readLine().trim());
+                    if (in.ready()) cityChosen = Integer.parseInt(in.readLine().trim());
+                    if (in.ready()) isNewsNotificationChecked = Boolean.parseBoolean(in.readLine().trim());
+                    Client client = clientContainer.getClientByClientId(clientId);
+                    if (client != null) {
+                        client.setTelegramChecked(isTelegramChecked);
+                        client.setWeatherNotificationChecked(isWeatherNotificationChecked);
+                        client.setNewsNotificationChecked(isNewsNotificationChecked);
+                        client.setCityChosen(cityChosen);
+                    }
+                    break;
+                }
             }
         } catch (IOException e) {
         }

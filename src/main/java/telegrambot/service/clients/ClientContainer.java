@@ -1,23 +1,17 @@
 package telegrambot.service.clients;
 
-import com.google.common.collect.ImmutableMap;
-import telegrambot.command.Command;
-import telegrambot.service.commands.*;
-
 import java.util.HashMap;
-
-import static telegrambot.command.CommandName.*;
 
 public class ClientContainer {
 
-    private static HashMap <String, Client> clientIdMap;
-    private static HashMap <String, Client> chatIdMap;
+    private static HashMap<String, Client> clientIdMap;
+    private static HashMap<String, Client> chatIdMap;
     private static ClientContainer clientContainer;
 
     private ClientContainer() {
     }
 
-    public static ClientContainer getInstance () {
+    public static ClientContainer getInstance() {
         if (clientContainer == null) {
             clientContainer = new ClientContainer();
             clientIdMap = new HashMap<>();
@@ -26,7 +20,7 @@ public class ClientContainer {
         return clientContainer;
     }
 
-    public HashMap<String, Client> getClientMap() {
+    public HashMap<String, Client> getClientIdMap() {
         return clientIdMap;
     }
 
@@ -34,17 +28,18 @@ public class ClientContainer {
         return chatIdMap;
     }
 
-    public Client getClientByClientId (String clientId) {
+    public Client getClientByClientId(String clientId) {
         return clientIdMap.get(clientId);
     }
 
-    public Client getClientByChatId (String chatId) {
+    public Client getClientByChatId(String chatId) {
         return chatIdMap.get(chatId);
     }
 
-    public void putClient (Client client) {
-        clientIdMap.put(client.getClientId(),client);
-        chatIdMap.put(client.getChatId(),client);
+    public void putClient(Client client) {
+            clientIdMap.putIfAbsent(client.getClientId(), client);
+
+            chatIdMap.putIfAbsent(client.getChatId(), client);
     }
 }
 

@@ -1,20 +1,18 @@
 package telegrambot.service.commands;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
-import telegrambot.bot.TelegramBot;
 import telegrambot.command.Command;
 import telegrambot.service.clients.Client;
 import telegrambot.service.clients.ClientContainer;
 import telegrambot.service.sendontime.OnTimeMessageSender;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 
 public class TimerCommand implements Command {
     private final SendBotMessageService sendBotMessageService;
     private final ClientContainer clientContainer;
     private final static String INCORRECT_TIME_MESSAGE = "Некоректно заданное время";
+    private Map <String, Timer> timerMap;
 
     public TimerCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;
@@ -33,6 +31,10 @@ public class TimerCommand implements Command {
             return;
         }
 
+
+        timerMap = client.getTimesMap();
+
+
         if (!timers[0].trim().matches("\\d{2}:\\d{2}")) {
             sendBotMessageService.sendMessage(chatId.toString(), "Задайте время командой /timer чч:мм\nВремя можно установить через" +
                     " запятую: /timer чч:мм, чч:мм");
@@ -40,22 +42,26 @@ public class TimerCommand implements Command {
         }
         for (String time : timers) {
             if (checkTimeIsCorrect(time.trim())) {
-                if (isTimerAlreadyHas(time, client)) {
+                if (isTimerAlreadyHas(time)) {
                     sendBotMessageService.sendMessage(chatId.toString(), "Оповещение на данное время уже установлено");
-                    return;
+                    continue;
                 } else {
-                    client.getListOfTimes().add(time.trim());
+                    timerMap.put(time.trim(), null);
                     new TimerMessageSetter().setTimer(time.trim(), client);
                     sendBotMessageService.sendMessage(client.getChatId(), String.format("Таймер ежедневных оповещений на %s успешно установлен", time));
                 }
             } else
                 sendBotMessageService.sendMessage(client.getChatId(), String.format(("%s: %s. Время не задано."), INCORRECT_TIME_MESSAGE, time));
         }
+        if (!client.isTelegramChecked()) {
+            sendBotMessageService.sendMessage(client.getChatId(), "Таймеры заданы, но уведомления не будут получены. Включите телеграм-бота в настройках" +
+                    " приложения.");
+        }
     }
 
-    private boolean isTimerAlreadyHas(String time, Client client) {
-        for (String clientTime : client.getListOfTimes()) {
-            if (clientTime.equals(time.trim())) {
+    private boolean isTimerAlreadyHas(String time) {
+        for (Map.Entry <String, Timer> clientTime : timerMap.entrySet()) {
+            if (clientTime.getKey().equals(time.trim())) {
                 return true;
             }
         }
@@ -70,11 +76,11 @@ public class TimerCommand implements Command {
     public class TimerMessageSetter {
 
         public void initTimers() {
-            for (Map.Entry<String, Client> entry : clientContainer.getClientMap().entrySet()) {
+            for (Map.Entry<String, Client> entry : clientContainer.getClientIdMap().entrySet()) {
                 Client client = entry.getValue();
-                List<String> timeToSend = client.getListOfTimes();
-                for (String time : timeToSend) {
-                    setTimer(time, client);
+                Map<String, Timer> timeToSend = client.getTimesMap();
+                for (Map.Entry <String, Timer> time : timeToSend.entrySet()) {
+                    setTimer(time.getKey(), client);
                 }
             }
         }
@@ -86,12 +92,20 @@ public class TimerCommand implements Command {
 
             Timer timer = new Timer();
 
+            client.getTimesMap().put(time, timer);
+
+
             Calendar date = Calendar.getInstance();
+            Calendar rightNow = Calendar.getInstance();
 
             date.set(Calendar.HOUR_OF_DAY, hour);
             date.set(Calendar.MINUTE, minute);
             date.set(Calendar.SECOND, 0);
             date.set(Calendar.MILLISECOND, 0);
+
+            if (date.before(rightNow)) {
+                date.set(Calendar.DATE, (rightNow.get(Calendar.DAY_OF_MONTH)+1));
+            }
 
             System.out.println(date.getTime());
             timer.schedule(
