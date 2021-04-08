@@ -15,7 +15,7 @@ public class OnTimeMessageSender extends TimerTask {
     private final WeatherParser weatherParser;
     public static final String EVERYDAY_NOTIFICATION = "И снова здравствуйте! Подготовил для Вас " +
             "пару новостей.";
-    public static final String NOTES_NOTIFICATION = "Так же не забудьте:";
+    public static final String NOTES_NOTIFICATION = "Ваши дела и планы:";
     public static final String NO_NOTES = "Заметок не обнаружено";
 
 
@@ -29,17 +29,19 @@ public class OnTimeMessageSender extends TimerTask {
     @Override
     public void run() {
         if (client.isTelegramChecked()) {
-            String listNews = newsParser.getListNews();
+            if (client.isNewsNotificationChecked() || client.isWeatherNotificationChecked()) {
+                sendBotMessageService.sendMessage(client.getChatId(), EVERYDAY_NOTIFICATION);
+            }
 
-            sendBotMessageService.sendMessage(client.getChatId(), EVERYDAY_NOTIFICATION);
-
-            sendBotMessageService.sendMessage(client.getChatId(), listNews);
-
+            if (client.isNewsNotificationChecked()) {
+                String listNews = newsParser.getListNews();
+                sendBotMessageService.sendMessage(client.getChatId(), listNews);
+            }
             if (client.isWeatherNotificationChecked()) {
                 CityContainer cityContainer = CityContainer.getInstance();
-                String weather = weatherParser.getListNews(cityContainer.getCity(client.getCityChosen()));
+                String weather = weatherParser.getWeather(cityContainer.getCity(client.getCityChosen()));
                 sendBotMessageService.sendMessage(client.getChatId(), "Погода в Вашем городе \n");
-                sendBotMessageService.sendMessage(client.getChatId(), weather);
+                sendBotMessageService.sendMessage(client.getChatId(), String.format("%s градусов цельсия", weather));
             }
 
             if (client.getListOfNotes().size() != 0) {

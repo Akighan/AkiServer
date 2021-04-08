@@ -52,14 +52,17 @@ public class AndrClient extends Thread {
                 case SEND_SETTINGS_MODIFICATION: {
                     boolean isTelegramChecked = false;
                     boolean isWeatherNotificationChecked = false;
+                    boolean isNewsNotificationChecked = false;
                     int cityChosen = 0;
                     if (in.ready()) isTelegramChecked = Boolean.parseBoolean(in.readLine().trim());
                     if (in.ready()) isWeatherNotificationChecked = Boolean.parseBoolean(in.readLine().trim());
-                    if (in.ready()) cityChosen = Integer.parseInt(in.readLine());
+                    if (in.ready()) cityChosen = Integer.parseInt(in.readLine().trim());
+                    if (in.ready()) isNewsNotificationChecked = Boolean.parseBoolean(in.readLine().trim());
                     Client client = clientContainer.getClientByClientId(clientId);
                     if (client != null) {
                         client.setTelegramChecked(isTelegramChecked);
                         client.setWeatherNotificationChecked(isWeatherNotificationChecked);
+                        client.setNewsNotificationChecked(isNewsNotificationChecked);
                         client.setCityChosen(cityChosen);
                     }
                     break;

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class WeatherParser {
     Document doc = null;
-    public String getListNews(String url) {
+    public String getWeather(String url) {
         try {
             doc = Jsoup.connect(url).get();
         } catch (IOException ioException) {

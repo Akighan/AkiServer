@@ -10,6 +10,7 @@ public class Client {
     private List <String> listOfTimes;
     private boolean isTelegramChecked = false;
     private boolean isWeatherNotificationChecked = false;
+    private boolean isNewsNotificationChecked = false;
     private int cityChosen;
 
     public Client(String clientId, String chatId) {
@@ -72,6 +73,14 @@ public class Client {
 
     public void setWeatherNotificationChecked(boolean weatherNotificationChecked) {
         isWeatherNotificationChecked = weatherNotificationChecked;
+    }
+
+    public boolean isNewsNotificationChecked() {
+        return isNewsNotificationChecked;
+    }
+
+    public void setNewsNotificationChecked(boolean newsNotificationChecked) {
+        isNewsNotificationChecked = newsNotificationChecked;
     }
 
     public int getCityChosen() {
