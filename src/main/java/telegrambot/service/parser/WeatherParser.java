@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class WeatherParser {
     Document doc = null;
+
     public String getWeather(String url) {
         try {
             doc = Jsoup.connect(url).get();

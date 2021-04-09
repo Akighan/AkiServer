@@ -37,7 +37,7 @@ public class OnTimeMessageSender extends TimerTask {
                 String listNews = newsParser.getListNews();
                 sendBotMessageService.sendMessage(client.getChatId(), listNews);
             }
-            if (client.isWeatherNotificationChecked()) {
+            if (client.isWeatherNotificationChecked() && client.getCityChosen() != 0) {
                 CityContainer cityContainer = CityContainer.getInstance();
                 String weather = weatherParser.getWeather(cityContainer.getCity(client.getCityChosen()));
                 sendBotMessageService.sendMessage(client.getChatId(), "Погода в Вашем городе \n");
