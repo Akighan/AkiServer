@@ -29,7 +29,7 @@ public class OnTimeMessageSender extends TimerTask {
     @Override
     public void run() {
         if (client.isTelegramChecked()) {
-            if (client.isNewsNotificationChecked() || client.isWeatherNotificationChecked()) {
+            if (client.isNewsNotificationChecked()) {
                 sendBotMessageService.sendMessage(client.getChatId(), EVERYDAY_NOTIFICATION);
             }
 
