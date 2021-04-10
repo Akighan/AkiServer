@@ -17,9 +17,12 @@ public class WeatherParser {
             ioException.printStackTrace();
         }
 
-
+        Elements cityInfo = doc.select ("div [class=pageinfo_title index-h1]");
+        String city = cityInfo.select("h1").text();
         Elements spans = doc.select("span [class=js_value tab-weather__value_l]");
-        Element span = spans.get(0);
-        return span.text();
+        Element temperature = spans.get(0);
+        Elements clouds = doc.select("div [class=tab  tooltip]");
+        String cloudName = clouds.attr("data-text");
+        return city + "::" + temperature.text() + "::" + cloudName.toLowerCase();
     }
 }

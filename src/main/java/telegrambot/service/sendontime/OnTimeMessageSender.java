@@ -28,28 +28,50 @@ public class OnTimeMessageSender extends TimerTask {
 
     @Override
     public void run() {
+        StringBuilder stringBuilder = new StringBuilder();
         if (client.isTelegramChecked()) {
             if (client.isNewsNotificationChecked()) {
-                sendBotMessageService.sendMessage(client.getChatId(), EVERYDAY_NOTIFICATION);
+                stringBuilder.append(EVERYDAY_NOTIFICATION).append("\n").append("\n");
+                //sendBotMessageService.sendMessage(client.getChatId(), EVERYDAY_NOTIFICATION);
             }
 
             if (client.isNewsNotificationChecked()) {
                 String listNews = newsParser.getListNews();
-                sendBotMessageService.sendMessage(client.getChatId(), listNews);
+                //sendBotMessageService.sendMessage(client.getChatId(), listNews);
+                stringBuilder.append("\uD83D\uDCF0")
+                        .append("\uD83D\uDCF0")
+                        .append("\uD83D\uDCF0\n")
+                        .append(listNews).append("\n");
             }
             if (client.isWeatherNotificationChecked() && client.getCityChosen() != 0) {
                 CityContainer cityContainer = CityContainer.getInstance();
                 String weather = weatherParser.getWeather(cityContainer.getCity(client.getCityChosen()));
-                sendBotMessageService.sendMessage(client.getChatId(), "Погода в Вашем городе \n");
-                sendBotMessageService.sendMessage(client.getChatId(), String.format("%s градусов цельсия", weather));
+                String[] temperatureAndCloud = weather.split("::");
+                //sendBotMessageService.sendMessage(client.getChatId(), String.format("%s\n\n%s градусов цельсия, %s", temperatureAndCloud[0], temperatureAndCloud[1], temperatureAndCloud[2]));
+                stringBuilder.append(String.format("\uD83C\uDF02" +
+                        "\uD83C\uDF02" +
+                        "\uD83C\uDF02\n" +
+                        "%s:\n\n%s градусов цельсия, %s", temperatureAndCloud[0], temperatureAndCloud[1], temperatureAndCloud[2])).append("\n").append("\n");
             }
 
             if (client.getListOfNotes().size() != 0) {
-                sendBotMessageService.sendMessage(client.getChatId(), NOTES_NOTIFICATION);
+                //sendBotMessageService.sendMessage(client.getChatId(), NOTES_NOTIFICATION);
+                stringBuilder.append("\uD83D\uDCD2")
+                        .append("\uD83D\uDCD2")
+                        .append("\uD83D\uDCD2\n")
+                        .append(NOTES_NOTIFICATION).append("\n\n");
 
-                sendBotMessageService.sendMessage(client.getChatId(), client.notesToString());
+                //sendBotMessageService.sendMessage(client.getChatId(), client.notesToString());
+                stringBuilder.append(client.notesToString());
             } else {
-                sendBotMessageService.sendMessage(client.getChatId(), NO_NOTES);
+                //sendBotMessageService.sendMessage(client.getChatId(), NO_NOTES);
+                stringBuilder.append("\uD83D\uDCD2")
+                        .append("\uD83D\uDCD2")
+                        .append("\uD83D\uDCD2\n")
+                        .append(NO_NOTES);
+            }
+            if (stringBuilder.length() > 0) {
+                sendBotMessageService.sendMessage(client.getChatId(), stringBuilder.toString());
             }
         }
     }
