@@ -52,11 +52,6 @@ public class StartCommand implements Command {
             sendBotMessageService.sendMessage(chatId.toString(), START_MESSAGE);
         } else {
             sendBotMessageService.sendMessage(chatId.toString(), START_MESSAGE_SHORT);
-            if (client.isTelegramChecked() && client.getTimesMap() != null && client.getTimesMap().size() > 0) {
-                List<String> sortedTimes = client.getSortedTimesMapKeys();
-
-                sendBotMessageService.sendMessage(chatId.toString(), "Ежедневные оповещения установлены на следующее время:\n" + sortedTimes);
-            }
         }
     }
 }

@@ -2,10 +2,10 @@ package telegrambot.command;
 
 public enum CommandName {
     START ("/start"),
-    STOP ("/stop"),
     HELP ("/help"),
     TIMER ("/timer"),
     DELETE ("/delete"),
+    TIMERS ("/timers"),
     NO ("");
 
     private final String commandName;

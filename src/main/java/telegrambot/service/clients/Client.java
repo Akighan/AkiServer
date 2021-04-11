@@ -19,13 +19,6 @@ public class Client {
         timesMap = new HashMap<>();
     }
 
-    public Client(String clientId) {
-        this.clientId = clientId;
-        this.chatId = null;
-        listOfNotes = new ArrayList<>();
-        timesMap = new HashMap<>();
-    }
-
     public String getClientId() {
         return clientId;
     }
@@ -45,7 +38,7 @@ public class Client {
     public String notesToString() {
         StringBuilder stringBuilder = new StringBuilder();
         for (String note : listOfNotes) {
-            stringBuilder.append(note).append("\n\n");
+            stringBuilder.append("\uD83D\uDCCC ").append(note).append("\n\n");
         }
         return stringBuilder.toString();
     }

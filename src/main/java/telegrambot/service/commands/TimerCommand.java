@@ -2,6 +2,7 @@ package telegrambot.service.commands;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 import telegrambot.command.Command;
+import telegrambot.command.CommandName;
 import telegrambot.service.clients.Client;
 import telegrambot.service.clients.ClientContainer;
 import telegrambot.service.sendontime.OnTimeMessageSender;
@@ -12,7 +13,7 @@ public class TimerCommand implements Command {
     private final SendBotMessageService sendBotMessageService;
     private final ClientContainer clientContainer;
     private final static String INCORRECT_TIME_MESSAGE = "Некоректно заданное время";
-    private Map <String, Timer> timerMap;
+    private Map<String, Timer> timerMap;
 
     public TimerCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;
@@ -48,7 +49,8 @@ public class TimerCommand implements Command {
                 } else {
                     timerMap.put(time.trim(), null);
                     new TimerMessageSetter().setTimer(time.trim(), client);
-                    sendBotMessageService.sendMessage(client.getChatId(), String.format("Таймер ежедневных оповещений на %s успешно установлен", time));
+                    sendBotMessageService.sendMessage(client.getChatId(), String.format("Таймер ежедневных оповещений на %s успешно установлен\n"
+                            + CommandName.TIMERS.getCommandName() + " - Список доступных таймеров.", time));
                 }
             } else
                 sendBotMessageService.sendMessage(client.getChatId(), String.format(("%s: %s. Время не задано."), INCORRECT_TIME_MESSAGE, time));
@@ -60,7 +62,7 @@ public class TimerCommand implements Command {
     }
 
     private boolean isTimerAlreadyHas(String time) {
-        for (Map.Entry <String, Timer> clientTime : timerMap.entrySet()) {
+        for (Map.Entry<String, Timer> clientTime : timerMap.entrySet()) {
             if (clientTime.getKey().equals(time.trim())) {
                 return true;
             }
@@ -79,7 +81,7 @@ public class TimerCommand implements Command {
             for (Map.Entry<String, Client> entry : clientContainer.getClientIdMap().entrySet()) {
                 Client client = entry.getValue();
                 Map<String, Timer> timeToSend = client.getTimesMap();
-                for (Map.Entry <String, Timer> time : timeToSend.entrySet()) {
+                for (Map.Entry<String, Timer> time : timeToSend.entrySet()) {
                     setTimer(time.getKey(), client);
                 }
             }
@@ -104,7 +106,7 @@ public class TimerCommand implements Command {
             date.set(Calendar.MILLISECOND, 0);
 
             if (date.before(rightNow)) {
-                date.set(Calendar.DATE, (rightNow.get(Calendar.DAY_OF_MONTH)+1));
+                date.set(Calendar.DATE, (rightNow.get(Calendar.DAY_OF_MONTH) + 1));
             }
 
             System.out.println(date.getTime());

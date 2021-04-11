@@ -2,6 +2,7 @@ package telegrambot.service.commands;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 import telegrambot.command.Command;
+import telegrambot.command.CommandName;
 import telegrambot.service.clients.Client;
 import telegrambot.service.clients.ClientContainer;
 
@@ -57,7 +58,8 @@ public class DeleteCommand implements Command {
                 if (isTimerAlreadyHas(time, client)) {
                     timerMap.get(time).cancel();
                     timerMap.remove(time);
-                    sendBotMessageService.sendMessage(chatId.toString(), "Оповещение на данное время успешно удалено");
+                    sendBotMessageService.sendMessage(chatId.toString(), "Оповещение на данное время успешно удалено.\n"
+                            + CommandName.TIMERS.getCommandName() + " - Список доступных таймеров.");
                     continue;
                 } else {
                     sendBotMessageService.sendMessage(client.getChatId(), String.format("Не нашёл таймера на %s", time));
