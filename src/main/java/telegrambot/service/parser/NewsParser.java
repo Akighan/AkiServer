@@ -24,17 +24,17 @@ public class NewsParser {
 
     Elements listNews = doc.select("div.gbl-mh.shrtl-l");
 
-    public String getListNews() {
+    public List<String> getListNews() {
         Elements listNewsElements = listNews.select("a");
-        StringBuilder stringBuilder = new StringBuilder();
+        List <String> news = new ArrayList<>();
         if (listNewsElements.size() > 3) {
             for (int i = 0; i<3; i++) {
                 Element element = listNewsElements.get(i);
                 String text = element.toggleClass("b").text();
                 String urlAddress = "https://newdaynews.ru" + element.attr("href");
-                stringBuilder.append(String.format("<a href=\"%s\">%s</a>",urlAddress, text)).append("\n\n");
+                news.add(String.format("<a href=\"%s\">%s</a>\n\n",urlAddress, text));
             }
         }
-        return stringBuilder.toString();
+        return news;
     }
 }

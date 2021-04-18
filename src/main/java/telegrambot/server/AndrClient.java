@@ -34,17 +34,30 @@ public class AndrClient extends Thread {
         ClientContainer clientContainer = ClientContainer.getInstance();
         List<String> notes = new ArrayList<>();
         try {
-            if (in.ready()) clientId = in.readLine();
-            String modification = in.readLine();
+            while (clientId == null) {
+                clientId = in.readLine();
+            }
+            System.out.println(clientId);
+
+            String modification = null;
+
+            while (modification == null) {
+                modification = in.readLine();
+            }
+
+            System.out.println(modification);
 
             switch (modification) {
                 case SEND_NOTES_MODIFICATION: {
                     while (in.ready()) {
                         note = in.readLine();
+                        System.out.println(note);
                         notes.add(note);
                     }
                     Client client = clientContainer.getClientByClientId(clientId);
                     if (client != null) {
+                        System.out.println("I'm in");
+                        System.out.println(notes);
                         client.setListOfNotes(notes);
                     }
                     break;
@@ -68,6 +81,9 @@ public class AndrClient extends Thread {
                     break;
                 }
             }
+
+            in.close();
+
         } catch (IOException e) {
         }
     }

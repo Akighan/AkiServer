@@ -19,6 +19,7 @@ public class CommandContainer {
                 .put(NO.getCommandName(), new NoCommand(sendBotMessageService))
                 .put (TIMER.getCommandName(), timerCommand)
                 .put(DELETE.getCommandName(), new DeleteCommand(sendBotMessageService))
+                .put(TIMERS.getCommandName(), new TimersCommand(sendBotMessageService))
                 .build();
         unknownCommand = new UnknownCommand(sendBotMessageService);
     }
